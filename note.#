@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #workBox {
+            margin-top: 20px;
+            display: flex;
+        }
+        #time {
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+        }
+        #time b {
+            width: 100px;
+            margin: 10px 0;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .workDiv {
+            margin-top: 20px;
+        }
+        .workBox {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        #addingTaskForm {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #addingTaskForm input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #addingTaskForm button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #addingTaskForm button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Task Scheduler</h2>
+
+    <div id="addForm">
+        <div id="addingTaskForm">
+            <input type="text" id="todoInput" placeholder="Add a new task...">
+            <i class="ri-mic-line" id="voiceBtn"></i>
+            <input type="text" id="timeInput" placeholder="Type here working time (e.g. 12:00 am - 12:30 am)">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+    </div>
+
+
+
+    <script>
+        function addTask() {
+            let task = document.getElementById('todoInput').value;
+            let time = document.getElementById('timeInput').value;
+
+            if (task !== "" && time !== "") {
+                // Find the correct time slot based on the input time
+                let timeSlot = findTimeSlot(time);
+
+                if (timeSlot) {
+                    // Create task label
+                    let taskBox = document.createElement('div');
+                    taskBox.classList.add('workBox');
+
+                    let taskLabel = document.createElement('b');
+                    taskLabel.textContent = task;
+
+                    let timeLabel = document.createElement('label');
+                    timeLabel.textContent = time;
+
+                    taskBox.appendChild(taskLabel);
+                    taskBox.appendChild(timeLabel);
+
+                    // Append task to the correct time slot
+                    timeSlot.appendChild(taskBox);
+
+                    // Clear input fields
+                    document.getElementById('todoInput').value = "";
+                    document.getElementById('timeInput').value = "";
+                } else {
+                    alert("Please enter a valid time.");
+                }
+            } else {
+                alert("Please enter both task and time.");
+            }
+        }
+
+        function findTimeSlot(inputTime) {
+            // Normalize the time (convert to lower case and remove spaces)
+            let normalizedTime = inputTime.trim().toLowerCase().split('-')[0].trim();
+
+            // Find the corresponding time element using data-time attribute
+            let timeElements = document.querySelectorAll('#time b');
+            for (let timeElement of timeElements) {
+                if (timeElement.getAttribute('data-time') === normalizedTime) {
+                    return timeElement; // Return the time element
+                }
+            }
+            return null; // Return null if no matching time is found
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("addListBtn").onclick = function() {
+    var workName = document.getElementById("listName").value;
+    var activityStatus = document.getElementById("listStatus").value;
+
+    if (workName.trim() === '' || activityStatus.trim() === '') {
+        alert("Please fill out both fields.");
+        return;
+    }
+
+    var listBox = document.getElementById("listBox");
+    var div = document.createElement("div");
+    div.className = "list";
+    var listId = Date.now();
+
+    div.innerHTML = `
+        <p class="time">${activityStatus}</p>
+        <div class="icon">🎨</div>
+        <h2>${workName}</h2>
+        <label>14 total tasks</label>
+    `;
+
+    saveToLocalStorage(listId, workName, activityStatus);
+
+    listBox.appendChild(div);
+    document.getElementById("listName").value = '';
+    document.getElementById("listStatus").value = '';
+}
+
+// Save list to local storage
+function saveToLocalStorage(id, workName, activityStatus) {
+    let lists = JSON.parse(localStorage.getItem('lists')) || {};
+    lists[id] = { workName, activityStatus };
+    localStorage.setItem('lists', JSON.stringify(lists));
+}
+
+// Load lists from local storage
+function loadLists() {
+    let lists = JSON.parse(localStorage.getItem('lists')) || {};
+    for (const [id, { workName, activityStatus }] of Object.entries(lists)) {
+        var listBox = document.getElementById("listBox");
+        var div = document.createElement("div");
+        div.className = "list";
+
+        div.innerHTML = `
+            <p class="time">${activityStatus}</p>
+            <div class="icon">🎨</div>
+            <h2>${workName}</h2>
+            <label>14 total tasks</label>
+        `;
+
+        listBox.appendChild(div);
+    }
+}
+
+// Load lists on page load
+window.onload = loadLists;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("addListBtn").onclick = function() {
+  var workName = document.getElementById("listName").value;
+  var activityStatus = document.getElementById("listStatus").value;
+
+  if (workName.trim() === '' || activityStatus.trim() === '') {
+      alert("Please fill out both fields.");
+      return;
+  }
+
+  var listBox = document.getElementById("listBox");
+  var div = document.createElement("div");
+  div.className = "list";
+  var listId = Date.now();
+
+  div.innerHTML = `
+      <p class="time">${activityStatus}</p>
+      <div class="icon">🎨</div>
+      <h2>${workName}</h2>
+      <label>14 total tasks</label>
+  `;
+
+  saveToLocalStorage(listId, workName, activityStatus);
+
+  listBox.appendChild(div);
+  document.getElementById("listName").value = '';
+  document.getElementById("listStatus").value = '';
+}
+
+function saveToLocalStorage(id, workName, activityStatus) {
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+  lists[id] = { workName, activityStatus };
+  localStorage.setItem('lists', JSON.stringify(lists));
+}
+
+function loadLists() {
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+  const listBox = document.getElementById("listBox");
+  
+  // Clear existing content
+  listBox.innerHTML = '';
+
+  for (const [id, { workName, activityStatus }] of Object.entries(lists)) {
+    const div = document.createElement("div");
+    div.className = "list";
+    div.id = id; // Assign id for click event handling
+
+    div.innerHTML = `
+      <p class="time">${activityStatus}</p>
+      <div class="icon">🎨</div>
+      <h2>${workName}</h2>
+      <label>14 total tasks</label>
+    `;
+
+    // Add click event listener
+    div.addEventListener('click', function() {
+      addListWork(id);
+    });
+
+    listBox.appendChild(div);
+  }
+}
+
+function addListWork(id) {
+  // Retrieve the lists from localStorage
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+  
+  // Check if the ID exists in the lists
+  if (lists[id]) {
+    const { workName, activityStatus } = lists[id];
+
+    // Display the #addWorkInList box
+    const addWorkInList = document.getElementById("addWorkInList");
+    addWorkInList.style.display = "block"; // Show the box
+
+    // Example: Hide the listBox
+    document.getElementById("MainPage").style.display = "none";
+  } else {
+    console.error('List with this ID does not exist');
+  }
+}
+
+// Load lists on page load
+window.onload = loadLists;

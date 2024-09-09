@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+</head>
+<body>
+
+    <div id="notAvailable">
+        <img src="undraw_notify_re_65on.svg" width="300px">
+        <center><h2>Sorry,</h2></center>
+        <h1>“This website is currently only accessible on Android devices.”</h1>
+    </div>
+
+
+    <div id="mobile">
+
+
+        <div id="homePage">
+
+            <div id="homePageHeader">
+                <img class="animate__animated animate__bounceIn" src="pencil-holder-with-pink-blue-pencils-inside_902639-42126-removebg-preview.png">
+            </div>
+     
+            <div id="homePageBottom">
+                <h2>Manage Your Daily Todo</h2>
+                <p>Organize Your Day, Achieve Your Goals  Effortlessly.  </p>
+                <button id="openMain"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+    
+        </div>
+
+
+
+        <div id="MainPage">
+
+            <div id="mainHeader">
+
+                <i class="fa-solid fa-bars"></i>
+                <b>Aug 30, 2024</b>
+                <i class="fa-solid fa-search" id="searchIcon"></i>
+
+                <input type="search" placeholder="Search Work" id="search">
+
+            </div>
+
+
+
+            <div id="MainSection">
+                 
+                <div id="weekHeader">
+                    <h1>Weekly Task</h1>
+                    <label>00 task pending</label>
+                </div>
+
+                <div id="listBox">
+                
+                </div>
+
+                <div class="displayWeekTask">
+                    <h1 class="pend">Design and function is in pending.</h1>
+
+                </div>
+
+                
+            <div id="addingListForm" class="animate__animated animate__fadeInUp animate__faster">
+                
+                <input type="text" id="listName" placeholder="Enter work Name" required>
+                <input type="text" id="listStatus" placeholder="Enter activity status" required>
+                <button id="addListBtn">Add List</button>
+
+            </div>
+
+            </div>
+            
+
+            <div class="neumorphic-navbar">
+                    <li class="list-item"><i class="ri-home-4-fill"></i>
+                      <span class="list-item-name">Home</span>
+                    </li>
+
+                    <li id="dailyButton" class="list-item"><i class="ri-calendar-2-fill"></i>
+                        <span class="list-item-name">Daily Task</span>
+                      </li>
+
+                    <li>
+                        <i id="addList" class="ri-add-fill"></i>
+                    </li>
+
+
+                    <li class="list-item">
+                        <i id="notification" class="ri-notification-2-line"></i>
+                        <span class="list-item-name">Notifications</span>
+                      </li>
+
+                    <li class="list-item">
+                      <i class="fa-solid fa-gear"></i>
+                      <span class="list-item-name">Settings</span>
+                    </li>
+
+            </div>
+
+
+            
+                
+ 
+        </div>
+
+
+        <div id="dailyBox">
+
+            <div id="mainHeader">
+
+                <i id="cutDaily" class="ri-arrow-left-s-line arrow"></i>
+                <b>Today Task</b>
+                <i class="ri-search-line"></i>
+
+                <input type="search" placeholder="Search Work" id="search">
+
+            </div>
+
+
+              <div id="dailyBoxSection">
+                
+                <div id="dayBox">
+
+                <div id="monthBox">
+                    <div id="month">
+                        <h1 id="currentDate">August, 30</h1>
+                        <p id="taskCount">0 task(s) today</p>
+
+                    </div>
+
+       
+                        <button><i class="ri-calendar-2-fill"></i></button>
+         
+                </div>
+
+                </div>
+
+                <div id="date">
+                  
+                </div>
+
+                
+                <div id="workBox">
+                    <div id="time">
+                        <div class="day" data-time="12 am"><p>12 am</p></div>
+                        <div class="day" data-time="01 am"><p>01 am</p></div>
+                        <div class="day" data-time="02 am"><p>02 am</p></div>
+                        <div class="day" data-time="03 am"><p>03 am</p></div>
+                        <div class="day" data-time="04 am"><p>04 am</p></div>
+                        <div class="day" data-time="05 am"><p>05 am</p></div>
+                        <div class="day" data-time="06 am"><p>06 am</p></div>
+                        <div class="day" data-time="07 am"><p>07 am</p></div>
+                        <div class="day" data-time="08 am"><p>08 am</p></div>
+                        <div class="day" data-time="09 am"><p>09 am</p></div>
+                        <div class="day" data-time="10 am"><p>10 am</p></div>
+                        <div class="day" data-time="11 am"><p>11 am</p></div>
+                        <div class="day" data-time="12 pm"><p>12 pm</p></div>
+                        <div class="day" data-time="01 pm"><p>01 pm</p></div>
+                        <div class="day" data-time="02 pm"><p>02 pm</p></div>
+                        <div class="day" data-time="03 pm"><p>03 pm</p></div>
+                        <div class="day" data-time="04 pm"><p>04 pm</p></div>
+                        <div class="day" data-time="05 pm"><p>05 pm</p></div>
+                        <div class="day" data-time="06 pm"><p>06 pm</p></div>
+                        <div class="day" data-time="07 pm"><p>07 pm</p></div>
+                        <div class="day" data-time="08 pm"><p>08 pm</p></div>
+                        <div class="day" data-time="09 pm"><p>09 pm</p></div>
+                        <div class="day" data-time="10 pm"><p>10 pm</p></div>
+                        <div class="day" data-time="11 pm"><p>11 pm</p></div>
+                        <div class="day" data-time="12 pm"><p>12 pm</p></div>
+                    </div>
+            
+
+                </div>
+
+
+
+                 <div id="addForm" class="animate__animated animate__fadeInUp animate__faster">
+                <div id="addingTaskForm">
+                    <input type="text" id="todoInput" placeholder="Add a new task...">
+                    <i class="ri-mic-line" id="voiceBtn"></i>
+                    <input type="text" id="timeInput" placeholder="Type here working time">
+                    <button onclick="addTask()">Add Task</button>
+                </div>
+                 </div>
+          
+
+
+              </div>
+
+
+            <div id="dailyBoxFooter">
+                <button id="addNew">Add New Task</button>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div id="notificationBox">
+
+            <div class="notiNav">
+                <i  class="ri-arrow-left-s-line arrow back" id="backNotification"></i>
+                <h3>Notifications&nbsp;<i class="ri-notification-2-line"></i></h3>
+            </div>
+
+            <div class="notiMainBox">
+
+            <div class="notiBox">
+
+                <h1>Design Meeting</h1>
+                <p>Ui/Ux design for zomo app.</p>
+                <label>2 hours ago</label>
+
+            </div>
+
+            <div class="notiBox">
+
+                <h1>Company Meeting</h1>
+                <p>Ui/Ux design for zomo app.</p>
+                <label>37 mins ago</label>
+
+            </div>
+
+            <div class="notiBox">
+
+                <h1>Staff Meeting</h1>
+                <p>Ui/Ux design for zomo app.</p>
+                <label>15 mins ago</label>
+
+            </div>
+
+            </div>
+
+
+        </div>
+          
+
+        <div id="addWorkInList">
+ 
+            <div id="header">
+                <i id="cutListBox" class="ri-arrow-left-s-line arrow"></i>
+                <b>Mern list</b>
+                <i class="ri-search-line"></i>
+            </div>
+
+                            
+            <div id="addBoxList" class="animate__animated animate__fadeInUp animate__faster">
+                <input id="taskName" type="text" placeholder="Enter work Name" required>
+                <input id="taskStatus" type="text" placeholder="Enter activity status" required>
+                <input id="taskTime" type="text" placeholder="Enter time (e.g., 11:30am - 12:30pm)" required>
+                <button id="addTaskBtn">Add List</button>
+            </div>
+ 
+            <div id="pendBox">
+ 
+                
+
+            </div>
+
+            <div id="addListWork">
+                <button id="addBoxListWork" class="addNew">Add New Task</button>
+            </div>
+    
+
+        </div>
+        
+    </div>
+
+    
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
