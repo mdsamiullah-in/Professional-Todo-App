@@ -299,3 +299,89 @@ function addListWork(id) {
 
 // Load lists on page load
 window.onload = loadLists;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function addListWork(id) {
+  // Retrieve the lists from localStorage
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+
+  // Check if the ID exists in the lists
+  if (lists[id]) {
+    const { workName, activityStatus } = lists[id];
+
+    // Get the addWorkInList box for the specific ID
+    let addWorkInList = document.getElementById(`addWorkInList-${id}`);
+
+    if (!addWorkInList) {
+      // Create the addWorkInList box if it doesn't exist
+      addWorkInList = document.createElement("div");
+      addWorkInList.id = `addWorkInList-${id}`;
+      addWorkInList.className = "addWorkInList";
+      addWorkInList.style.display = "none"; // Initially hidden
+      document.body.appendChild(addWorkInList);
+    }
+
+    // Update the content of the addWorkInList box
+    addWorkInList.innerHTML = `
+      <h3>Work Name: ${workName}</h3>
+      <p>Activity Status: ${activityStatus}</p>
+      <button onclick="closeWorkInList('${id}')">Close</button>
+    `;
+
+    // Display the addWorkInList box
+    addWorkInList.style.display = "block";
+
+    // Hide the main page or listBox
+    document.getElementById("MainPage").style.display = "none";
+  } else {
+    console.error('List with this ID does not exist');
+  }
+}
+
+function closeWorkInList(id) {
+  const addWorkInList = document.getElementById(`addWorkInList-${id}`);
+  if (addWorkInList) {
+    addWorkInList.style.display = "none"; // Hide the box
+  }
+
+  // Optionally, show the main page or listBox
+  document.getElementById("MainPage").style.display = "block";
+}

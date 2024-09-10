@@ -218,55 +218,30 @@ function saveToLocalStorage(id, workName, activityStatus) {
   localStorage.setItem('lists', JSON.stringify(lists));
 }
 
-function loadLists() {
-  let lists = JSON.parse(localStorage.getItem('lists')) || {};
-  const listBox = document.getElementById("listBox");
+
+// Load tasks from localStorage on page load
+window.onload = function() {
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
   
-  // Clear existing content
-  listBox.innerHTML = '';
-
-  for (const [id, { workName, activityStatus }] of Object.entries(lists)) {
-    const div = document.createElement("div");
-    div.className = "list";
-    div.id = id; // Assign id for click event handling
-
-    div.innerHTML = `
-      <p class="time">${activityStatus}</p>
-      <div class="icon">🎨</div>
-      <h2>${workName}</h2>
-      <label>14 total tasks</label>
-    `;
-
-    // Add click event listener
-    div.addEventListener('click', function() {
-      addListWork(id);
-    });
-
-    listBox.appendChild(div);
-  }
+  tasks.forEach(item => {
+    let timeSlot = findTimeSlot(item.time);
+    if (timeSlot) {
+      let taskBox = document.createElement('div');
+      taskBox.className = "workName";
+      
+      taskBox.innerHTML = `
+        <div class="taskDiv">
+          <b>${sanitizeInput(item.task)}</b>
+          <label>${sanitizeInput(item.time)}</label>
+        </div>
+      `;
+      
+      timeSlot.appendChild(taskBox); 
+      loadLists()
+      updateTaskCount();
+    }
+  });
 }
-
-function addListWork(id) {
-  // Retrieve the lists from localStorage
-  let lists = JSON.parse(localStorage.getItem('lists')) || {};
-  
-  // Check if the ID exists in the lists
-  if (lists[id]) {
-    const { workName, activityStatus } = lists[id];
-
-    // Display the #addWorkInList box
-    const addWorkInList = document.getElementById("addWorkInList");
-    addWorkInList.style.display = "block"; // Show the box
-
-    // Example: Hide the listBox
-    document.getElementById("MainPage").style.display = "none";
-  } else {
-    console.error('List with this ID does not exist');
-  }
-}
-
-
-
 
 
 function addTask() {
@@ -326,47 +301,9 @@ function saveTaskToLocalStorage(task, time) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-// Load tasks from localStorage on page load
-window.onload = function() {
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  
-  tasks.forEach(item => {
-    let timeSlot = findTimeSlot(item.time);
-    if (timeSlot) {
-      let taskBox = document.createElement('div');
-      taskBox.className = "workName";
-      
-      taskBox.innerHTML = `
-        <div class="taskDiv">
-          <b>${sanitizeInput(item.task)}</b>
-          <label>${sanitizeInput(item.time)}</label>
-        </div>
-      `;
-      
-      timeSlot.appendChild(taskBox); 
-      loadLists()
-      updateTaskCount();
-    }
-  });
-}
-
-
-
-
-
-
-
-
 function sanitizeInput(input) {
   return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
-
-
-
-
-
-
-
 
 function sanitizeInput(input) {
   let element = document.createElement('div');
@@ -427,8 +364,7 @@ function findTimeSlot(inputTime) {
   
       // Apply special styling for today
       if (i === 0) {
-        button.style.backgroundColor = 'dodgerblue';
-        button.style.color = 'white';
+        button.className = "cur"
       }
   
 
@@ -443,56 +379,212 @@ function findTimeSlot(inputTime) {
 
 
 
-    // Get the elements from the DOM
-const addTaskBtn = document.getElementById('addTaskBtn');
-const pendBox = document.getElementById('pendBox');
 
-// Add event listener to the Add List button
-addTaskBtn.addEventListener('click', function() {
-    // Get input values
-    const taskName = document.getElementById('taskName').value;
-    const taskStatus = document.getElementById('taskStatus').value;
-    const taskTime = document.getElementById('taskTime').value;
-
-    // Validate that all inputs have values
-    if (taskName === '' || taskStatus === '' || taskTime === '') {
-        alert('Please fill out all fields');
-        return;
-    }
-
-    // Create a new task box
-    const taskBox = document.createElement('div');
-    taskBox.classList.add('pendBox');
-
-    // Create the task name element (h1)
-    const taskTitle = document.createElement('h1');
-    taskTitle.textContent = taskName;
-
-    // Create the task status element (p)
-    const taskDescription = document.createElement('p');
-    taskDescription.textContent = taskStatus;
-
-    // Create the time label element (label)
-    const taskTimeLabel = document.createElement('label');
-    taskTimeLabel.innerHTML = `<i class="ri-alarm-line"></i> ${taskTime}`;
-
-    // Append the elements to the taskBox div
-    taskBox.appendChild(taskTitle);
-    taskBox.appendChild(taskDescription);
-    taskBox.appendChild(taskTimeLabel);
-
-    // Append the new taskBox to the pendBox container
-    pendBox.appendChild(taskBox);
-
-    // Clear input fields after adding the task
-    document.getElementById('taskName').value = '';
-    document.getElementById('taskStatus').value = '';
-    document.getElementById('taskTime').value = '';
-});
  
+
+
+
+
+
+let selectedListId = null;
+
+function loadLists() {
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+  const listBox = document.getElementById("listBox");
+
+  // Clear existing content
+  listBox.innerHTML = '';
+
+  for (const [id, { workName, activityStatus }] of Object.entries(lists)) {
+    const div = document.createElement("div");
+    div.className = "list";
+    div.id = id; // Assign id for click event handling
+
+    div.innerHTML = `
+      <p class="time">${activityStatus}</p>
+      <div class="icon">🎨</div>
+      <h2>${workName}</h2>
+      <label>${(lists[id].tasks || []).length} total tasks</label>
+    `;
+
+    // Add click event listener
+    div.addEventListener('click', function() {
+      selectList(id);
+    });
+
+    listBox.appendChild(div);
+  }
+}
+
+function selectList(id) {
+  selectedListId = id; // Set the selected list ID globally
+  addListWork(id); // Load tasks and details for the selected list
+}
+
+function addListWork(id) {
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+
+  if (lists[id]) {
+    const { workName, activityStatus, taskTime, tasks = [] } = lists[id];
+
+    const addWorkInList = document.getElementById("addWorkInList");
+
+    if (addWorkInList) {
+      document.getElementById("taskName").value = workName || '';
+      document.getElementById("taskStatus").value = activityStatus || '';
+      document.getElementById("taskTime").value = taskTime || '';
+
+      // Clear the previous tasks from pendBox
+      const pendBox = document.getElementById("pendBox");
+      pendBox.innerHTML = '';
+
+      // Load existing tasks
+      tasks.forEach(task => {
+        const taskBox = document.createElement('div');
+        taskBox.classList.add('pendBox');
+
+        const taskTitle = document.createElement('h1');
+        taskTitle.textContent = task.taskName;
+
+        const taskDescription = document.createElement('p');
+        taskDescription.textContent = task.taskStatus;
+
+        const taskTimeLabel = document.createElement('label');
+        taskTimeLabel.innerHTML = `<i class="ri-alarm-line"></i> ${task.taskTime}`;
+
+        taskBox.appendChild(taskTitle);
+        taskBox.appendChild(taskDescription);
+        taskBox.appendChild(taskTimeLabel);
+
+        pendBox.appendChild(taskBox);
+      });
+
+      addWorkInList.style.display = "block";
+      document.getElementById("MainPage").style.display = "none";
+    }
+  } else {
+    console.error(`No list found with ID: ${id}`);
+  }
+}
+
+function addNewTask() {
+  const taskName = document.getElementById('taskName').value.trim();
+  const taskStatus = document.getElementById('taskStatus').value.trim();
+  const taskTime = document.getElementById('taskTime').value.trim();
+
+  // Validate inputs
+  if (taskName === '' || taskStatus === '' || taskTime === '') {
+    alert('Please fill out all fields');
+    return;
+  }
+
+  if (!selectedListId) {
+    alert('No list selected');
+    return;
+  }
+
+  // Get lists from local storage or initialize empty object
+  let lists = JSON.parse(localStorage.getItem('lists')) || {};
+
+  if (lists[selectedListId]) {
+    const { tasks = [] } = lists[selectedListId];
+
+    // Add new task
+    tasks.push({ taskName, taskStatus, taskTime });
+    lists[selectedListId].tasks = tasks;
+
+    // Update local storage
+    localStorage.setItem('lists', JSON.stringify(lists));
+
+    // Update the pendBox with new task
+    const pendBox = document.getElementById('pendBox');
+    if (pendBox) {
+      const taskBox = document.createElement('div');
+      taskBox.classList.add('pendBox');
+
+      const taskTitle = document.createElement('h1');
+      taskTitle.textContent = taskName;
+
+      const taskDescription = document.createElement('p');
+      taskDescription.textContent = taskStatus;
+
+      const taskTimeLabel = document.createElement('label');
+      taskTimeLabel.innerHTML = `<i class="ri-alarm-line"></i> ${taskTime}`;
+
+      taskBox.appendChild(taskTitle);
+      taskBox.appendChild(taskDescription);
+      taskBox.appendChild(taskTimeLabel);
+
+      pendBox.appendChild(taskBox);
+
+      // Clear input fields
+      document.getElementById('taskName').value = '';
+      document.getElementById('taskStatus').value = '';
+      document.getElementById('taskTime').value = '';
+    } else {
+      console.error('pendBox element not found');
+    }
+  } else {
+    alert('No such list found');
+  }
+}
+
+// Add event listener to the Add Task button
+const addTaskBtn = document.getElementById('addTaskBtn');
+if (addTaskBtn) {
+  addTaskBtn.onclick = addNewTask;
+}
+
+// Initial call to load the lists when the page loads
+window.onload = loadLists;
+
+
+
+
+
+
+
+// Close button functionality
+document.getElementById("cutListBox")?.addEventListener('click', function() {
+  const addWorkInList = document.getElementById("addWorkInList");
+  if (addWorkInList) {
+    addWorkInList.style.display = "none";
+  }
+
+  const mainPage = document.getElementById("MainPage");
+  if (mainPage) {
+    mainPage.style.display = "block";
+  }
+});
+
+// Load lists on page load
+document.addEventListener('DOMContentLoaded', loadLists);
+
+
+
+
+// Example of how you might set up a list item click
+document.getElementById("list1").addEventListener('click', function() {
+  addListWork('list1');
+});
+document.getElementById("list2").addEventListener('click', function() {
+  addListWork('list2');
+});
+
+// Close button functionality
+document.getElementById("cutListBox").addEventListener('click', function() {
+  document.getElementById("addWorkInList").style.display = "none";
+  document.getElementById("MainPage").style.display = "block";
+});
+
+
 
 
 document.getElementById("cutListBox").onclick = function(){
   document.getElementById("addWorkInList").style.display = "none"
   document.getElementById("MainPage").style.display = "block"
 }
+
+
+
+
