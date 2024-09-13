@@ -1210,6 +1210,7 @@ input:focus {
   color: white;
   transition: all 0.3s ease;
   font-size: 22px;
+  border: 2px solid white;
 }
 
 #addList:hover{

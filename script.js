@@ -219,168 +219,8 @@ function saveToLocalStorage(id, workName, activityStatus) {
 }
 
 
-// Load tasks from localStorage on page load
-window.onload = function() {
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  
-  tasks.forEach(item => {
-    let timeSlot = findTimeSlot(item.time);
-    if (timeSlot) {
-      let taskBox = document.createElement('div');
-      taskBox.className = "workName";
-      
-      taskBox.innerHTML = `
-        <div class="taskDiv">
-          <b>${sanitizeInput(item.task)}</b>
-          <label>${sanitizeInput(item.time)}</label>
-        </div>
-      `;
-      
-      timeSlot.appendChild(taskBox); 
-      loadLists()
-      updateTaskCount();
-    }
-  });
-}
 
 
-function addTask() {
-  let task = document.getElementById('todoInput').value;
-  let time = document.getElementById('timeInput').value;
-
-  if (task !== "" && time !== "") {
-    // Find the correct time slot based on the input time
-    let timeSlot = findTimeSlot(time);
-
-    if (timeSlot) {
-      // Create task box
-      let taskBox = document.createElement('div');
-      taskBox.className = "workName"
-      
-      // Use innerHTML with template literal to add task and time
-      taskBox.innerHTML = `
-       <div class="taskDiv">
-            <b>${sanitizeInput(task)}</b>
-            <label>${sanitizeInput(time)}</label>
-       </div>
-      `;
-
-      // Append taskBox to the correct time slot
-      timeSlot.appendChild(taskBox);
-
-      // Save task to localStorage
-      saveTaskToLocalStorage(task, time);
-
-      // Clear input fields
-      document.getElementById('todoInput').value = "";
-      document.getElementById('timeInput').value = "";
-    } else {
-      alert("Please enter a valid time.");
-    }
-  } else {
-    alert("Please enter both task and time.");
-  }
-}
-
-
-function updateTaskCount() {
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  let taskCount = tasks.length;
-
-  // If task count is less than 10, add leading zero
-  let formattedCount = taskCount < 10 ? '0' + taskCount : taskCount;
-
-  // Display the task count
-  document.getElementById('taskCount').innerText = `${formattedCount} task today`;
-}
-
-
-function saveTaskToLocalStorage(task, time) {
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  tasks.push({ task, time });
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-function sanitizeInput(input) {
-  return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function sanitizeInput(input) {
-  let element = document.createElement('div');
-  element.innerText = input;
-  return element.innerHTML;
-}
-
-function findTimeSlot(time) {
-  // For example, find a div by time or return null if not found
-  return document.getElementById('time-slot-' + time) || null;
-}
-
-function getRandomColor() {
-  const colors = ['#FDE68A', '#A7F3D0', '#FECACA', '#BFDBFE', '#C4B5FD'];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function findTimeSlot(inputTime) {
-  // Normalize the time (convert to lower case and remove spaces)
-  let normalizedTime = inputTime.trim().toLowerCase().split('-')[0].trim();
-
-  // Find the corresponding time element using data-time attribute
-  let timeElements = document.querySelectorAll('#time div');
-  for (let timeElement of timeElements) {
-      if (timeElement.getAttribute('data-time') === normalizedTime) {
-          return timeElement; // Return the time element
-      }
-  }
-  return null; // Return null if no matching time is found
-}
-
-
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const today = new Date();
-  const month = monthNames[today.getMonth()];
-  const date = today.getDate();
-  document.getElementById("currentDate").textContent = `${month}, ${date}`;
-
-
-
-
-    let dateContainer = document.getElementById('date');
-    let selectedButton = null; // Track the currently selected button
-  
-    for (let i = 0; i < 7; i++) {
-      let button = document.createElement('button');
-      
-      let h1 = document.createElement('h1');
-      h1.innerText = today.getDate(); // Get current day
-  
-      let label = document.createElement('label');
-      label.innerText = today.toLocaleDateString('en-US', { weekday: 'short' }); // Get day (e.g., Sat)
-  
-      button.appendChild(h1);
-      button.appendChild(label);
-  
-      button.className = "button"
-  
-      // Apply special styling for today
-      if (i === 0) {
-        button.className = "cur"
-      }
-  
-
-  
-      dateContainer.appendChild(button);
-  
-      // Move to the next day
-      today.setDate(today.getDate() + 1);
-    }
-
-
-
-
-
-
- 
 
 
 
@@ -542,49 +382,228 @@ window.onload = loadLists;
 
 
 
+function addTask() {
+  let task = document.getElementById('todoInput').value;
+  let time = document.getElementById('timeInput').value;
 
+  if (task !== "" && time !== "") {
+    // Find the correct time slot based on the input time
+    let timeSlot = findTimeSlot(time);
 
-// Close button functionality
-document.getElementById("cutListBox")?.addEventListener('click', function() {
-  const addWorkInList = document.getElementById("addWorkInList");
-  if (addWorkInList) {
-    addWorkInList.style.display = "none";
+    if (timeSlot) {
+      // Create task box
+      let taskBox = document.createElement('div');
+      taskBox.className = "workName"
+      
+      // Use innerHTML with template literal to add task and time
+      taskBox.innerHTML = `
+       <div class="taskDiv">
+            <b>${sanitizeInput(task)}</b>
+            <label>${sanitizeInput(time)}</label>
+       </div>
+      `;
+
+      // Append taskBox to the correct time slot
+      timeSlot.appendChild(taskBox);
+
+      // Save task to localStorage
+      saveTaskToLocalStorage(task, time);
+
+      // Clear input fields
+      document.getElementById('todoInput').value = "";
+      document.getElementById('timeInput').value = "";
+    } else {
+      alert("Please enter a valid time.");
+    }
+  } else {
+    alert("Please enter both task and time.");
   }
+}
 
-  const mainPage = document.getElementById("MainPage");
-  if (mainPage) {
-    mainPage.style.display = "block";
+
+function updateTaskCount() {
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  let taskCount = tasks.length;
+
+  // If task count is less than 10, add leading zero
+  let formattedCount = taskCount < 10 ? '0' + taskCount : taskCount;
+
+  // Display the task count
+  document.getElementById('taskCount').innerText = `${formattedCount} task today`;
+}
+
+
+function saveTaskToLocalStorage(task, time) {
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  tasks.push({ task, time });
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// Load tasks from localStorage on page load
+window.onload = function() {
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  
+  tasks.forEach(item => {
+    let timeSlot = findTimeSlot(item.time);
+    if (timeSlot) {
+      let taskBox = document.createElement('div');
+      taskBox.className = "workName";
+      
+      taskBox.innerHTML = `
+        <div class="taskDiv">
+          <b>${sanitizeInput(item.task)}</b>
+          <label>${sanitizeInput(item.time)}</label>
+        </div>
+      `;
+      
+      timeSlot.appendChild(taskBox); 
+      loadLists()
+      updateTaskCount();
+    }
+  });
+}
+
+
+
+
+
+
+
+
+function sanitizeInput(input) {
+  return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+
+
+
+
+
+
+
+function sanitizeInput(input) {
+  let element = document.createElement('div');
+  element.innerText = input;
+  return element.innerHTML;
+}
+
+function findTimeSlot(time) {
+  // For example, find a div by time or return null if not found
+  return document.getElementById('time-slot-' + time) || null;
+}
+
+function getRandomColor() {
+  const colors = ['#FDE68A', '#A7F3D0', '#FECACA', '#BFDBFE', '#C4B5FD'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function findTimeSlot(inputTime) {
+  // Normalize the time (convert to lower case and remove spaces)
+  let normalizedTime = inputTime.trim().toLowerCase().split('-')[0].trim();
+
+  // Find the corresponding time element using data-time attribute
+  let timeElements = document.querySelectorAll('#time div');
+  for (let timeElement of timeElements) {
+      if (timeElement.getAttribute('data-time') === normalizedTime) {
+          return timeElement; // Return the time element
+      }
   }
+  return null; // Return null if no matching time is found
+}
+
+
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const today = new Date();
+  const month = monthNames[today.getMonth()];
+  const date = today.getDate();
+  document.getElementById("currentDate").textContent = `${month}, ${date}`;
+
+
+
+
+    let dateContainer = document.getElementById('date');
+    let selectedButton = null; // Track the currently selected button
+  
+    for (let i = 0; i < 7; i++) {
+      let button = document.createElement('button');
+      
+      let h1 = document.createElement('h1');
+      h1.innerText = today.getDate(); // Get current day
+  
+      let label = document.createElement('label');
+      label.innerText = today.toLocaleDateString('en-US', { weekday: 'short' }); // Get day (e.g., Sat)
+  
+      button.appendChild(h1);
+      button.appendChild(label);
+  
+      button.className = "button"
+  
+      // Apply special styling for today
+      if (i === 0) {
+        button.className = "cur"
+      }
+  
+
+  
+      dateContainer.appendChild(button);
+  
+      // Move to the next day
+      today.setDate(today.getDate() + 1);
+    }
+
+
+
+
+
+    // Get the elements from the DOM
+const pendBox = document.getElementById('pendBox');
+
+// Add event listener to the Add List button
+addTaskBtn.addEventListener('click', function() {
+    // Get input values
+    const taskName = document.getElementById('taskName').value;
+    const taskStatus = document.getElementById('taskStatus').value;
+    const taskTime = document.getElementById('taskTime').value;
+
+    // Validate that all inputs have values
+    if (taskName === '' || taskStatus === '' || taskTime === '') {
+        alert('Please fill out all fields');
+        return;
+    }
+
+    // Create a new task box
+    const taskBox = document.createElement('div');
+    taskBox.classList.add('pendBox');
+
+    // Create the task name element (h1)
+    const taskTitle = document.createElement('h1');
+    taskTitle.textContent = taskName;
+
+    // Create the task status element (p)
+    const taskDescription = document.createElement('p');
+    taskDescription.textContent = taskStatus;
+
+    // Create the time label element (label)
+    const taskTimeLabel = document.createElement('label');
+    taskTimeLabel.innerHTML = `<i class="ri-alarm-line"></i> ${taskTime}`;
+
+    // Append the elements to the taskBox div
+    taskBox.appendChild(taskTitle);
+    taskBox.appendChild(taskDescription);
+    taskBox.appendChild(taskTimeLabel);
+
+    // Append the new taskBox to the pendBox container
+    pendBox.appendChild(taskBox);
+
+    // Clear input fields after adding the task
+    document.getElementById('taskName').value = '';
+    document.getElementById('taskStatus').value = '';
+    document.getElementById('taskTime').value = '';
 });
-
-// Load lists on page load
-document.addEventListener('DOMContentLoaded', loadLists);
-
-
-
-
-// Example of how you might set up a list item click
-document.getElementById("list1").addEventListener('click', function() {
-  addListWork('list1');
-});
-document.getElementById("list2").addEventListener('click', function() {
-  addListWork('list2');
-});
-
-// Close button functionality
-document.getElementById("cutListBox").addEventListener('click', function() {
-  document.getElementById("addWorkInList").style.display = "none";
-  document.getElementById("MainPage").style.display = "block";
-});
-
-
+ 
 
 
 document.getElementById("cutListBox").onclick = function(){
   document.getElementById("addWorkInList").style.display = "none"
   document.getElementById("MainPage").style.display = "block"
 }
-
-
-
-

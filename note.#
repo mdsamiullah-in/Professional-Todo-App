@@ -385,3 +385,302 @@ function closeWorkInList(id) {
   // Optionally, show the main page or listBox
   document.getElementById("MainPage").style.display = "block";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.find({
+    _id: {
+       $in: [
+          ObjectId('66e2435e639a7af852c73bfa'),
+        ObjectId('66e2435e639a7af852c73bfd'),
+        ObjectId('66e0542fc0270e7e93c73c06')
+       ]
+    }
+},
+{
+    stock: 1,
+    _id: 0
+}
+
+)
+
+
+db.products.updateOne(
+  {_id: ObjectId('66e286a0f9a294c371ccaf45')},
+  {
+  $set: {stock: 70000}
+  }
+)
+
+
+db.products.updateMany(
+    {
+      _id: {
+        $in: [
+         ObjectId('66e286a0f9a294c371ccaf45'),
+        ObjectId('66e2435e639a7af852c73bfd'),
+        ObjectId('66e0542fc0270e7e93c73c06')
+        ]
+      }
+    },
+    {
+        $set: {stock: 70000}
+    }
+)
+
+
+
+
+db.products.updateOne(
+    {_id: ObjectId('66e25720639a7af852c73c15')},
+    {
+        $push: {
+            tags: 'video'
+        }
+    }
+)
+
+
+db.products.updateOne(
+    {_id: ObjectId('66e25720639a7af852c73c1d')},
+    {
+        $pull: {
+            tags: 'appliances'
+        }
+    }
+)
+
+
+
+db.products.updateOne(
+    {_id: ObjectId('66e25720639a7af852c73c1e')},
+    {
+        $pullAll: {
+            tags: ["smart", "bulb"]
+        }
+    }
+)
+
+
+
+db.products.updateOne(
+    {
+        _id: ObjectId('66e25720639a7af852c73c1e')
+    },
+    $pullAll: {
+        tags: "Speaker"
+    }
+)
+
+
+
+db.products.updateOne(
+    {_id: ObjectId('66e25720639a7af852c73c15')},
+    {
+        $addToSet: {
+            tags: 'video'
+        }
+    }
+)
+
+
+db.products.find({ tags: {$size: {
+        $gte: 2,
+        $lte: 3
+}}})
+
+db.products.find({tags: {$size:{
+    $gte: 2, 
+    $lte: 3
+}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.find({
+      _id: {
+      $in: [
+         ObjectId('66e16a59a141ae38e2c73bfc'),
+         ObjectId('66e16a59a141ae38e2c73bfd'),
+           ObjectId('66e16a59a141ae38e2c73bfe')
+      ]
+      }
+})
+
+
+
+
+
+
+db.products.updateOne(
+    {_id: ObjectId('66e16a59a141ae38e2c73bf8')}, 
+    {
+        $set: {stock: 100}
+    }
+)
+
+
+
+
+
+
+db.products.updateMany(
+      {
+         _id: {
+               $in: [
+                  ObjectId('66e286a0f9a294c371ccaf45'),
+                  ObjectId('66e286a0f9a294c371ccaf46')
+
+               ]
+         }
+    },
+
+    {
+        $set: {stock: 500}
+    }
+      
+)
+
+
+
+
+
+
+
+
+
+db.products.updateOne(
+... {_id: ObjectId('66e286a0f9a294c371ccaf46')},
+...
+... {
+...
+...  $push: {
+...    tags: 'laptop'
+...  }
+... }
+... )
+
+
+db.products.find(
+    {_id: ObjectId('66e286a0f9a294c371ccaf45')},
+    {tags: {
+        $slice: [2,4]
+    }}
+)
+
+
+db.products.updateOne(
+     {_id : ObjectId('66e286a0f9a294c371ccaf45')},
+     {$set: {
+        'tags.$[elem]': 'nodeJs Updated'
+     }},
+     {arrayFilters: [{elem: 'nodeJs'}]}
+)
+
+
+
+
+
+
+
+
+
+[
+    {
+        "studentName": "Aayan",
+        "class": 1,
+        "roll": 1,
+         "marks":[
+
+          {
+             "subject": "maths",
+             "totalMarks": 100,
+             "marks": 75
+          },
+                    {
+             "subject": "English",
+             "totalMarks": 80,
+             "marks": 50
+          },
+          {
+             "subject": "Hindi",
+             "totalMarks": 50,
+             "marks": 25
+          }
+
+
+         ]
+    }
+]
+
+
+
+
+
+
+
+db.products.find({
+     marks: {
+        $elemMatch: {
+            subject: 'maths',
+            marks: 75
+        }
+     }
+})
+
+
+
+db.products.find({
+     marks: {
+         $elemMatch: {
+             marks: {
+                 $lte: 45
+             }
+         }
+     }
+})
+
+
+
+
+
+
+
+db.products.find(
+     {},
+     {
+         marks: {
+        $slice: [1,2]
+     }
+     }
+)
